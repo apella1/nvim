@@ -36,14 +36,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- Linter
-	{ "mfussenegger/nvim-lint" },
-	-- Formatter
-	{ "mhartington/formatter.nvim" },
-
-	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	-- nvim tree
-
 	{
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
@@ -75,57 +68,16 @@ require("lazy").setup({
 		opts = {
 			ensure_installed = {
 				"gh",
-				"stylua",
-				"gitleaks",
 				"lua_ls",
 				"lua-language-server",
 				"luacheck",
 				"luaformatter",
-				"rust_analyzer",
-				"black",
-				"ruff",
-				"mypy",
-				"pyright",
-				"eslint_d",
-				"rustywind",
-				"emmet-ls",
-				"jsonlint",
 				"markdownlint",
-				"prettier",
-				"prettierd",
 				"cspell",
-				"djlint",
-				"html-lsp",
-				"css-lsp",
-				"cssmodules-language-server",
-				"autoflake",
-				"sqlls",
-				"commitlint",
-				"docformatter",
 			},
 		},
 	},
 	{ "williamboman/mason-lspconfig.nvim" },
-	-- LSP Support
-	{
-		"VonHeikemen/lsp-zero.nvim",
-		branch = "v3.x",
-		lazy = true,
-		config = false,
-	},
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			{ "hrsh7th/cmp-nvim-lsp" },
-		},
-	},
-	-- Autocompletion
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			{ "L3MON4D3/LuaSnip" },
-		},
-	},
 })
 
 -- Colorscheme config
@@ -187,56 +139,6 @@ vim.opt.termguicolors = true
 vim.cmd([[colorscheme dracula]])
 -- vim.cmd.colorscheme("dracula")
 
--- Configuring lsp zero
-local lsp_zero = require("lsp-zero")
-
-lsp_zero.on_attach(function(client, bufnr)
-	-- see :help lsp-zero-keybindings
-	-- to learn the available actions
-	lsp_zero.default_keymaps({ buffer = bufnr })
-end)
-
--- Setting up mason
-require("mason").setup({})
-
-require("mason-lspconfig").setup({
-	handlers = {
-		lsp_zero.default_setup,
-	},
-	ensure_installed = {
-		"lua_ls",
-		"rust_analyzer",
-		"pyright",
-		"cssmodules_ls",
-		"cssls",
-		"denols",
-		"eslint",
-		"emmet_ls",
-		"grammarly",
-		"graphql",
-		"html",
-		"biome",
-		"tsserver",
-		"ruff_lsp",
-		"sqlls",
-		"taplo",
-	},
-})
-
--- Configuring different lsps (requiring special configs)
--- setup_servers({"tsserver", "etc"}) - no configs
-require("lspconfig").tsserver.setup({})
-require("lspconfig").rust_analyzer.setup({})
--- require("lspconfig").black.setup({})
--- require("lspconfig").cspell.setup({})
--- require("lspconfig").djlint.setup({})
-require("lspconfig").emmet_ls.setup({})
-require("lspconfig").tailwindcss.setup({})
-require("lspconfig").cssls.setup({})
--- require("lspconfig").prettier.setup({})
--- require("lspconfig").ruff.setup({})
--- require("lspconfig").markdownlint.setup({})
-
 -- Starting lua line
 require("lualine").setup()
 
@@ -259,113 +161,12 @@ require("nvim-tree").setup({
 	on_attach = my_on_attach,
 })
 
--- Indent blackline
-require("ibl").setup()
-
--- Adding customized keybindings
-local cmp = require("cmp")
-local cmp_action = require("lsp-zero").cmp_action()
-
-cmp.setup({
-	mapping = cmp.mapping.preset.insert({
-		-- `Enter` key to confirm completion
-		["<CR>"] = cmp.mapping.confirm({ select = false }),
-
-		-- Ctrl+Space to trigger completion menu
-		["<C-Space>"] = cmp.mapping.complete(),
-
-		-- Navigate between snippet placeholder
-		["<C-f>"] = cmp_action.luasnip_jump_forward(),
-		["<C-b>"] = cmp_action.luasnip_jump_backward(),
-
-		-- Scroll up and down in the completion documentation
-		["<C-u>"] = cmp.mapping.scroll_docs(-4),
-		["<C-d>"] = cmp.mapping.scroll_docs(4),
-	}),
-})
-
 -- Telescope mappings
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
-
--- Configuring linters
-require("lint").linters_by_ft = {
-	markdown = { "vale" },
-	javascript = { "eslint" },
-	typescript = { "eslint" },
-	python = { "pyright" },
-}
-
--- Setting up autocmd to trigger linting
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-	callback = function()
-		require("lint").try_lint()
-	end,
-})
-
--- Configuring formatter
--- Utilities for creating configurations
-local util = require("formatter.util")
-
--- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
-require("formatter").setup({
-	-- Enable or disable logging
-	logging = true,
-	-- Set the log level
-	log_level = vim.log.levels.WARN,
-	-- All formatter configurations are opt-in
-	filetype = {
-		-- Formatter configurations for filetype "lua" go here
-		-- and will be executed in order
-		lua = {
-			-- "formatter.filetypes.lua" defines default configurations for the
-			-- "lua" filetype
-			require("formatter.filetypes.lua").stylua,
-
-			-- You can also define your own configuration
-			function()
-				-- Supports conditional formatting
-				if util.get_current_buffer_file_name() == "special.lua" then
-					return nil
-				end
-
-				-- Full specification of configurations is down below and in Vim help
-				-- files
-				return {
-					exe = "stylua",
-					args = {
-						"--search-parent-directories",
-						"--stdin-filepath",
-						util.escape_path(util.get_current_buffer_file_path()),
-						"--",
-						"-",
-					},
-					stdin = true,
-				}
-			end,
-		},
-		javascript = {
-			require("formatter.filetypes.javascript").prettier,
-		},
-		typescript = {
-			require("formatter.filetypes.typescript").prettier,
-		},
-		python = {
-			require("formatter.filetypes.python").black,
-		},
-
-		-- Use the special "*" filetype for defining formatter configurations on
-		-- any filetype
-		["*"] = {
-			-- "formatter.filetypes.any" defines default configurations for any
-			-- filetype
-			require("formatter.filetypes.any").remove_trailing_whitespace,
-		},
-	},
-})
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	command = "FormatWriteLock",
