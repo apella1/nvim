@@ -2,8 +2,8 @@
 return {
     {
         "Mofiqul/dracula.nvim",
-        lazy = false,  -- Load immediately
-        priority = 1000,  -- Ensure it loads first
+        lazy = false,    -- Load immediately
+        priority = 1000, -- Ensure it loads first
         config = function()
             -- Configure dracula
             local dracula = require("dracula")
@@ -40,7 +40,7 @@ return {
                 italic_comment = true,
                 overrides = {},
             })
-            
+
             -- Set the colorscheme
             vim.cmd([[colorscheme dracula]])
         end,
@@ -51,7 +51,7 @@ return {
     },
     {
         "nvim-lualine/lualine.nvim",
-        dependencies = { 
+        dependencies = {
             "nvim-tree/nvim-web-devicons",
             "Mofiqul/dracula.nvim"
         },
@@ -83,7 +83,7 @@ return {
     { "nvim-treesitter/nvim-treesitter" },
     { "tpope/vim-surround" },
     { "tpope/vim-commentary" },
-    { "wakatime/vim-wakatime", lazy = false },
+    { "wakatime/vim-wakatime",          lazy = false },
     {
         "williamboman/mason.nvim",
         opts = {
@@ -100,4 +100,3 @@ return {
     },
     { "williamboman/mason-lspconfig.nvim" },
 }
-
