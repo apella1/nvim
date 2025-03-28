@@ -99,4 +99,42 @@ return {
         },
     },
     { "williamboman/mason-lspconfig.nvim" },
+    -- Quick file navigation
+    {
+        "nvim-telescope/telescope.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope-file-browser.nvim",
+        },
+    },
+    -- Terminal integration
+    {
+        "akinsho/toggleterm.nvim",
+        version = "*",
+        config = true,
+    },
+    -- File explorer
+    {
+        "nvim-tree/nvim-tree.lua",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+    },
+    -- Code actions and quick fixes
+    {
+        "neovim/nvim-lspconfig",  -- Changed from "nvim-lspconfig/nvim-lspconfig"
+    },
+    -- Code formatting
+    {
+        "stevearc/conform.nvim",
+        opts = {},
+    },
+    -- Code runner
+    {
+        "CRAG666/code_runner.nvim",
+        config = true,
+    },
+    -- Comment toggling
+    {
+        "numToStr/Comment.nvim",
+        config = true,
+    },
 }
