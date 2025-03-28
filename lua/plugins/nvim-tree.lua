@@ -1,7 +1,7 @@
 return {
     "nvim-tree/nvim-tree.lua",
     version = "*",
-    lazy = false,
+    lazy = true,  -- Changed to true to lazy load
     dependencies = {
         "nvim-tree/nvim-web-devicons",
     },
@@ -31,6 +31,25 @@ return {
 
         require("nvim-tree").setup({
             on_attach = my_on_attach,
+            disable_netrw = true,
+            hijack_netrw = true,
+            auto_close = true,
+            open_on_tab = false,
+            hijack_cursor = false,
+            update_cwd = true,
+            hijack_directories = {
+                enable = true,
+                auto_open = false,  -- Don't auto-open tree
+            },
+            diagnostics = {
+                enable = true,
+                icons = {
+                    hint = "",
+                    info = "",
+                    warning = "",
+                    error = "",
+                },
+            },
             -- File and folder rendering
             renderer = {
                 add_trailing = false,
