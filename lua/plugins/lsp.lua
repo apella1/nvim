@@ -13,24 +13,24 @@ return {
             -- Enable completion triggered by <c-x><c-o>
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-            -- Buffer local mappings
+            -- Buffer local mapping
             local opts = { noremap = true, silent = true, buffer = bufnr }
-            
+
             -- Navigation
             vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
             vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
             vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
             vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
-            
+
             -- Documentation
             vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
             vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-            
+
             -- Actions
             vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
             vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-            
+
             -- Diagnostics
             vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
             vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
@@ -114,9 +114,9 @@ return {
         -- Tailwind CSS
         lspconfig.tailwindcss.setup({
             on_attach = on_attach,
-            filetypes = { 
+            filetypes = {
                 -- Extend default filetypes
-                "aspnetcorerazor", 
+                "aspnetcorerazor",
                 "astro",
                 "astro-markdown",
                 "blade",
@@ -175,10 +175,10 @@ return {
                 tailwindCSS = {
                     experimental = {
                         classRegex = {
-                            "tw`([^`]*)",       -- tw`...`
-                            'tw="([^"]*)',      -- <div tw="..." />
-                            'tw={"([^"}]*)',    -- <div tw={"..."} />
-                            "tw\\.\\w+`([^`]*)", -- tw.xxx`...`
+                            "tw`([^`]*)",          -- tw`...`
+                            'tw="([^"]*)',         -- <div tw="..." />
+                            'tw={"([^"}]*)',       -- <div tw={"..."} />
+                            "tw\\.\\w+`([^`]*)",   -- tw.xxx`...`
                             "tw\\(.*?\\)`([^`]*)", -- tw(..)`...`
                         },
                     },
